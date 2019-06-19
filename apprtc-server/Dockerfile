@@ -53,7 +53,7 @@ COPY turnserver.conf /etc/turnserver.conf
 
 # AppRTC
 WORKDIR /
-RUN git clone https://github.com/appprtc/apprtc.git
+RUN git clone https://github.com/apprtc/apprtc.git
 
 WORKDIR apprtc
 
