@@ -63,7 +63,7 @@ RUN ln -s /apprtc/src/collider/collidertest $GOPATH/src
 RUN go get collidermain
 RUN go install collidermain
 
-RUN npm install -g npm cors
+RUN npm install -g npm
 RUN npm install -g grunt-cli
 
 RUN npm install
@@ -71,7 +71,7 @@ RUN grunt build
 
 WORKDIR /
 
-RUN npm install express
+RUN npm install express cors
 COPY ice.js /
 COPY constants.py /apprtc/out/app_engine/constants.py
 
