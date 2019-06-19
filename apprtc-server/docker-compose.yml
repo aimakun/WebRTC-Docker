@@ -4,6 +4,8 @@ services:
     build: .
     restart: always
     network_mode: host
+    volumes:
+      - apprtc.py:/apprtc/out/app_engine/apprtc.py
     environment:
       PUBLIC_IP: server1.example.com #
       VIRTUAL_HOST: server1.example.com #
