@@ -53,9 +53,11 @@ COPY turnserver.conf /etc/turnserver.conf
 
 # AppRTC
 WORKDIR /
-RUN git clone https://github.com/webrtc/apprtc.git
+RUN git clone https://github.com/appprtc/apprtc.git
 
 WORKDIR apprtc
+
+RUN git checkout dev-ssl-termination
 
 RUN ln -s /apprtc/src/collider/collider $GOPATH/src
 RUN ln -s /apprtc/src/collider/collidermain $GOPATH/src
@@ -63,7 +65,7 @@ RUN ln -s /apprtc/src/collider/collidertest $GOPATH/src
 RUN go get collidermain
 RUN go install collidermain
 
-RUN npm install -g npm
+RUN npm install -g npm cors
 RUN npm install -g grunt-cli
 
 RUN npm install
@@ -79,6 +81,8 @@ COPY constants.py /apprtc/out/app_engine/constants.py
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY apprtc_supervisord.conf /
+
+RUN mkdir /webrtc_avconf && chmod 777 /webrtc_avconf
 
 COPY run.sh /
 RUN chmod +x /run.sh
