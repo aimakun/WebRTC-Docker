@@ -57,8 +57,6 @@ RUN git clone https://github.com/webrtc/apprtc.git
 
 WORKDIR apprtc
 
-RUN git checkout dev-ssl-termination
-
 RUN ln -s /apprtc/src/collider/collider $GOPATH/src
 RUN ln -s /apprtc/src/collider/collidermain $GOPATH/src
 RUN ln -s /apprtc/src/collider/collidertest $GOPATH/src
