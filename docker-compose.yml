@@ -1,0 +1,47 @@
+version: '3.1'
+services:
+  apprtc-server:
+    build: .
+    restart: always
+    network_mode: host
+    environment:
+      PUBLIC_IP: server1.example.com #
+      VIRTUAL_HOST: server1.example.com #
+      VIRTUAL_IP: 127.0.0.1
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: server1.example.com #
+      LETSENCRYPT_EMAIL: me@example.com #
+
+  nginx-proxy:
+    # image: jwilder/nginx-proxy
+    image: freekers/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - .docker/proxy/certs:/etc/nginx/certs:ro
+      - nginx-vhost:/etc/nginx/vhost.d
+      - .docker/proxy/html:/usr/share/nginx/html
+      - .docker/proxy/custom_hosts.conf:/etc/nginx/conf.d/custom_hosts.conf:ro
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+    restart: always
+
+  letsencrypt-updater:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    network_mode: host
+    volumes:
+      - .docker/proxy/certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx-vhost:/etc/nginx/vhost.d
+      - .docker/proxy/html:/usr/share/nginx/html
+#    environment:
+#      ACME_CA_URI: https://acme-staging.api.letsencrypt.org/directory
+    depends_on:
+      - nginx-proxy
+    restart: always
+
+volumes:
+  nginx-vhost:
