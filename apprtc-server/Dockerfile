@@ -77,6 +77,9 @@ RUN npm install express cors
 COPY ice.js /
 COPY constants.py /apprtc/out/app_engine/constants.py
 
+# Force update apprtc.py
+RUN cp -i /apprtc/src/app_engine/apprtc.py /apprtc/out/app_engine/apprtc.py
+
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
