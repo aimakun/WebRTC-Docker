@@ -1,5 +1,6 @@
 var express = require('express')
 var crypto = require('crypto')
+var cors = require('cors')
 var app = express()
 
 var hmac = function (key, content) {
@@ -32,8 +33,8 @@ function handleIceRequest(req, resp) {
   })
 }
 
-app.get('/iceconfig', handleIceRequest)
-app.post('/iceconfig', handleIceRequest)
+app.get('/iceconfig', cors(), handleIceRequest)
+app.post('/iceconfig', cors(), handleIceRequest)
 
 app.listen('3033', function () {
   console.log('server started')
