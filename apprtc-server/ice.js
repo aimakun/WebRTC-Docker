@@ -23,8 +23,8 @@ function handleIceRequest(req, resp) {
     iceServers: [
       {
         urls: [
-          'stun:SERVER_PUBLIC_IP:3478',
-          'turn:SERVER_PUBLIC_IP:3478'
+          'stun:' + req.hostname + ':3478',
+          'turn:' + req.hostname + ':3478'
         ],
         username: turn_username,
         credential: password
