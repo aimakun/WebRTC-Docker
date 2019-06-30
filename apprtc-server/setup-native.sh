@@ -64,8 +64,27 @@ go install collidermain
 cd /home/ubuntu/
 git clone https://github.com/aimakun/WebRTC-Docker.git
 cd WebRTC-Docker/apprtc-server/
+git checkout dev-appscale
 sudo -H -u deploy bash -c ". ~/.nvm/nvm.sh; nvm install 8; nvm use 8; cd /home/ubuntu/WebRTC-Docker/apprtc-server/ && npm install express cors"
 mkdir /webrtc_avconf && chmod 777 /webrtc_avconf
 cp turnserver.conf /etc/turnserver.conf
 cp ice.js /ice.js
 supervisord -c /home/ubuntu/WebRTC-Docker/apprtc-server/apprtc_supervisord.conf
+
+# TODO: nginx server blocks point to SSL termination endpoints (ICE/WebSocket/Room App proxy port with same backend)
+# /etc/nginx/site-enabled/proxy.conf OR
+# /etc/nginx/site-enabled/aliases.conf
+
+# Open ports: 80,443 (AppScale proxy), 3034,8090
+
+# Certbot
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot python-certbot-nginx
+
+# sudo certbot certonly --nginx
+# sudo certbot renew --dry-run
+# sudo certbot renew --pre-hook "service nginx stop" --post-hook "yes | cp -f /etc/letsencrypt/live/server0.app.liszo.com/fullchain.pem /etc/nginx/mycert.pem; yes | cp -f /etc/letsencrypt/live/server0.app.liszo.com/privkey.pem /etc/nginx/mykey.pem; service nginx start;"
