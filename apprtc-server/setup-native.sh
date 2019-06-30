@@ -1,7 +1,5 @@
 DEBIAN_FRONTEND=noninteractive apt-get update -y &&     apt-get install -y     build-essential     apt-transport-https ca-certificates curl software-properties-common     supervisor
 adduser --disabled-password --gecos "" deploy
-su deploy -c     "bash \"install -m700 -d /home/deploy/.ssh\""
-sudo su deploy
 fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile
 swapon /swapfile
 swapon --show
@@ -47,8 +45,6 @@ cd turnserver-$COTURN_VER
 ./configure && make && make install
 turnadmin -a -u ninefingers -r apprtc -p youhavetoberealistic
 
-vim /etc/turnserver.conf
-
 cd /home/ubuntu/
 git clone https://github.com/aimakun/apprtc.git
 cd apprtc
@@ -65,7 +61,7 @@ cd /home/ubuntu/
 git clone https://github.com/aimakun/WebRTC-Docker.git
 cd WebRTC-Docker/apprtc-server/
 git checkout dev-appscale
-sudo -H -u deploy bash -c ". ~/.nvm/nvm.sh; nvm install 8; nvm use 8; cd /home/ubuntu/WebRTC-Docker/apprtc-server/ && npm install express cors"
+/home/deploy/.nvm/nvm.sh; nvm install 8; nvm use 8; npm install express cors
 mkdir /webrtc_avconf && chmod 777 /webrtc_avconf
 cp turnserver.conf /etc/turnserver.conf
 cp ice.js /ice.js
